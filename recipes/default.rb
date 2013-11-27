@@ -18,15 +18,13 @@ git "#{home}/.dotfiles" do
   enable_submodules true
 end
 
-#bash "clone blazeroot dotfiles" do
-#  user user['name']
-#  cwd home
-#  code <<-EOH
-#    git clone https://github.com/blazeroot/dotfiles.git .dotfiles
-#    git submodule init
-#    git submodule update
-#  EOH
-#end
+bash 'Setup dotfiles' do
+  cwd "#{home}/.dotfiles"
+  environment 'HOME' => home
+  code <<-EOH
+    "#{home}/.dotfiles/spread"
+  EOH
+end
 
 user user['name'] do
   action :modify
