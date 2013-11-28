@@ -8,8 +8,8 @@
 include_recipe "git"
 include_recipe "zsh"
 
-user = node[:dotfiles][:user]
-home = user['name'] == 'root' ? '/root' : "/home/#{user['name']}"
+u    = node[:dotfiles][:user]
+home = u['name'] == 'root' ? '/root' : "/home/#{u['name']}"
 
 git "#{home}/.dotfiles" do
   repository 'https://github.com/blazeroot/dotfiles.git'
@@ -19,6 +19,7 @@ git "#{home}/.dotfiles" do
 end
 
 bash 'Setup dotfiles' do
+  user u['name']
   cwd "#{home}/.dotfiles"
   environment 'HOME' => home
   code <<-EOH
@@ -26,7 +27,7 @@ bash 'Setup dotfiles' do
   EOH
 end
 
-user user['name'] do
+user u['name'] do
   action :modify
   shell '/bin/zsh'
 end
